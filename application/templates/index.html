@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script src="../static/main.js?1906260240"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js?1906241132"></script>
+</head>
+<body onload="init()">
+<h3>데이터 전처리</h3>
+<input type="file" accept="text/plain" id="input" onchange="fileRead()">
+<br>
+    <!-- name: 같은 라디오버튼 그룹으로 묶는 역할. 같은 그룹은 같은 이름으로 설정 -->
+    <!-- value: 라디오버튼 객체마다 가지고 있는 내부적인 값 -->
+    <div>
+        <input type="radio" name="analysis_type" value="0" onclick="onRadioChange(this)" disabled >Named Entity Detection
+        <input type="radio" name="analysis_type" value="1" onclick="onRadioChange(this)" disabled >N-Grams Extraction
+        <input type="radio" name="analysis_type" value="2" onclick="onRadioChange(this)" disabled >Word Pair Extraction
+        <input type="radio" name="analysis_type" value="3" onclick="onRadioChange(this)" disabled >Phrase Detection
+    </div>
+
+    <div>
+        <div id="word_pair_param_ui" style="display: none">
+            <span>Word Pair Extraction Parameters</span>
+            <select id="pos_list1">
+                <option value="NOUN">명사(NOUN)</option>
+                <option value="VERB">동사(VERB)</option>
+                <option value="ADJ">형용사(ADJ)</option>
+                <option value="ADV">부사(ADV)</option>
+                <option value="DET">한정사(DET)</option>
+                <option value="PRON">대명사(PRON)</option>
+                <option value="PREP">전치사(PREP)</option>
+                <option value="CONJ">접속사(CONJ)</option>
+                <option value="INT">감탄사(INT)</option>
+            </select>
+            <select id="pos_list2">
+                <option value="NOUN">명사(NOUN)</option>
+                <option value="VERB">동사(VERB)</option>
+                <option value="ADJ">형용사(ADJ)</option>
+                <option value="ADV">부사(ADV)</option>
+                <option value="DET">한정사(DET)</option>
+                <option value="PRON">대명사(PRON)</option>
+                <option value="PREP">전치사(PREP)</option>
+                <option value="CONJ">접속사(CONJ)</option>
+                <option value="INT">감탄사(INT)</option>
+            </select>
+        </div>
+        <div id="ngrams_param_ui" style="display: none">
+            <span>N-Grams Extraction Parameters</span>
+            토큰 수: <input type="number" id="ngrams_num_tokens" value="3" min="0">
+            빈도수 임계값: <input type="number" id="ngrams_freq_threshold" value="5" min="0">
+        </div>
+
+    </div>
+
+    <div>
+        <input type="button" id="submit" onclick="submitBtnOnClick()" value="전송" disabled />
+        <input type="button" id="download" onclick="downloadBtnOnClick()" value="다운로드" disabled />
+    </div>
+<br>
+<div id="output">내용이 이곳에 출력됩니다.</div>
+</body>
+</html>
