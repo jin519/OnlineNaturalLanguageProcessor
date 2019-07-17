@@ -1,28 +1,132 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="UTF-8">
-    <title>Document</title>
-    <script src="../static/main.js?1906260240"></script>
+    <title>Online Data Analyzer</title>
+    <script src="../static/main.js?1907171657"></script>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js?1906241132"></script>
+    <style>
+        h1 {
+            text-align: center;
+        }
+
+        form {
+            background-color: aliceblue;
+            width: 70%;
+            padding: 30px;
+            border-radius: 5px;
+            margin: auto;
+        }
+
+        .box {
+            text-align: center;
+            background-color: white;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        #fileReaderForm {
+            width: 40%;
+        }
+
+        #analysisTypeFieldset {
+            border: none;
+            padding: 20px 20px 30px 20px;
+            margin-bottom: 32px;
+        }
+
+        #analysisTypeFieldset>label {
+            background-color: aliceblue;
+            display: inline-block;
+            text-align: left;
+            width: 400px;
+            margin: 5px 80px;
+            padding: 5px;
+            border-radius: 5px;
+        }
+
+        #analysisTypeFieldset>label:hover {
+            background-color: #a6c7ff;
+        }
+
+        .hiddenBox {
+            display: none;
+            background-color: white;
+            padding: 10px;
+            border-radius: 5px;
+            margin-right: 100%;
+            margin-bottom: 32px;
+        }
+
+        #ngramsParamUI {
+            width: 320px;
+        }
+
+        #wordPairParamUI {
+            width: 232px;
+        }
+
+        #phraseParamUI {
+            width: 105px;
+        }
+
+        #buttonSection {
+            display: inline-block;
+            width: 120px;
+        }
+
+        #textAreaSection>* {
+            text-align: left;
+            vertical-align: top;
+            border: 2px solid #a6c7ff;
+            display: inline-block;
+            width: 600px;
+            padding: 10px;
+            border-radius: 5px;
+        }
+    </style>
 </head>
+
 <body onload="init()">
-<h3>데이터 전처리</h3>
-<input type="file" accept="text/plain" id="input" onchange="fileRead()">
-<br>
-    <!-- name: 같은 라디오버튼 그룹으로 묶는 역할. 같은 그룹은 같은 이름으로 설정 -->
-    <!-- value: 라디오버튼 객체마다 가지고 있는 내부적인 값 -->
-    <div>
-        <input type="radio" name="analysis_type" value="0" onclick="onRadioChange(this)" disabled >Named Entity Detection
-        <input type="radio" name="analysis_type" value="1" onclick="onRadioChange(this)" disabled >N-Grams Extraction
-        <input type="radio" name="analysis_type" value="2" onclick="onRadioChange(this)" disabled >Word Pair Extraction
-        <input type="radio" name="analysis_type" value="3" onclick="onRadioChange(this)" disabled >Phrase Detection
-    </div>
+    <h1>Online Data Analyzer</h1>
 
-    <div>
-        <div id="word_pair_param_ui" style="display: none">
-            <span>Word Pair Extraction Parameters</span>
-            <select id="pos_list1">
+    <form>
+        <input id="fileReaderForm" class="box" type="file" accept="text/plain" onchange="fileRead()"><br><br>
+
+        <fieldset id=analysisTypeFieldset class="box">
+            <legend>Analysis type</legend>
+            <label>
+                <input type="radio" name="radioButtons" value="0" onclick="onRadioChange(this)" disabled>
+                Named Entity Detection
+            </label>
+            <label>
+                <input type="radio" name="radioButtons" value="1" onclick="onRadioChange(this)" disabled>
+                N-Grams Extraction
+            </label>
+            <label>
+                <input type="radio" name="radioButtons" value="2" onclick="onRadioChange(this)" disabled>
+                Word Pair Extraction
+            </label>
+            <label>
+                <input type="radio" name="radioButtons" value="3" onclick="onRadioChange(this)" disabled>
+                Phrase Detection
+            </label>
+        </fieldset>
+
+        <div id="ngramsParamUI" class="hiddenBox">
+            <label>
+                토큰 수&nbsp;
+                <input type="number" id="ngramsNumTokens" value="2" min="0" max="10" step="1">
+            </label>
+            <label>
+                &nbsp;&nbsp;빈도수 임계값&nbsp;
+                <input type="number" id="ngramsFreqThreshold" value="3" min="0" max="10" step="1">
+            </label>
+        </div>
+
+        <div id="wordPairParamUI" class="hiddenBox">
+            <select id="posList1">
                 <option value="NOUN">명사(NOUN)</option>
                 <option value="VERB">동사(VERB)</option>
                 <option value="ADJ">형용사(ADJ)</option>
@@ -33,7 +137,7 @@
                 <option value="CONJ">접속사(CONJ)</option>
                 <option value="INT">감탄사(INT)</option>
             </select>
-            <select id="pos_list2">
+            <select id="posList2">
                 <option value="NOUN">명사(NOUN)</option>
                 <option value="VERB">동사(VERB)</option>
                 <option value="ADJ">형용사(ADJ)</option>
@@ -45,19 +149,26 @@
                 <option value="INT">감탄사(INT)</option>
             </select>
         </div>
-        <div id="ngrams_param_ui" style="display: none">
-            <span>N-Grams Extraction Parameters</span>
-            토큰 수: <input type="number" id="ngrams_num_tokens" value="3" min="0">
-            빈도수 임계값: <input type="number" id="ngrams_freq_threshold" value="5" min="0">
+
+        <div id="phraseParamUI" class="hiddenBox">
+            <select id="phraseList">
+                <option value="NP">명사구(NP)</option>
+                <option value="PP">전치사구(PP)</option>
+                <option value="VP">동사구(VP)</option>
+            </select>
         </div>
 
-    </div>
+        <div id="buttonSection" class="box">
+            <input type="button" id="submit" onclick="submitBtnOnClick()" value="전송" disabled />
+            <input type="button" id="download" onclick="downloadBtnOnClick()" value="다운로드" disabled />
+        </div>
+    </form>
+    <br>
 
-    <div>
-        <input type="button" id="submit" onclick="submitBtnOnClick()" value="전송" disabled />
-        <input type="button" id="download" onclick="downloadBtnOnClick()" value="다운로드" disabled />
+    <div id="textAreaSection" class="box">
+        <div id="input">input</div>
+        <div id="output">output</div>
     </div>
-<br>
-<div id="output">내용이 이곳에 출력됩니다.</div>
 </body>
+
 </html>

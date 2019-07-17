@@ -49,9 +49,10 @@ def WordPair(name=None):
 @flaskInstance.route("/Phrase", methods=['POST'])
 def Phrase(name=None):
     article = request.form['article']
+    phrase = request.form['additionalParams']
 
     # some logic in here
-    result = PhraseExtractor.run(article)
+    result = PhraseExtractor.run(article, phrase)
 
     retVal = {'result': result}
     return jsonify(retVal)

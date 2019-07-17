@@ -18,7 +18,7 @@ def run(article, pos1, pos2):
     pron = 'EX|PRP|^WP' # 대명사
     prep = '^TO|^IN'    # 전치사
     conj = 'CC'         # 접속사
-    int_ = 'UH'          # 감탄사
+    int_ = 'UH'         # 감탄사
 
     # word pair 패턴 정의
     patternList = ('pattern1: {<%s><%s>}' % (pos1, pos2))

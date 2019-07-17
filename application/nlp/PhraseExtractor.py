@@ -1,11 +1,10 @@
 from nltk import word_tokenize
 from nltk import pos_tag
-from nltk import sent_tokenize
 from nltk import RegexpParser
 from nltk import tree
 
 
-def run(article):
+def run(article, phrase):
     # 컨텐츠 내에 있는 모든 단어들을 공백 문자열 기준으로 Tokenizing
     rawTokens = word_tokenize(article)
 
@@ -32,7 +31,7 @@ def run(article):
     retVal = ''
 
     for subtree in parsedTree:
-        if isinstance(subtree, tree.Tree) and subtree.label() == "NP":
+        if isinstance(subtree, tree.Tree) and subtree.label() == phrase:
             retVal += (str(subtree) + '\r\n')
 
     return retVal
