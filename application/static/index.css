@@ -1,0 +1,47 @@
+body {
+    text-align: center;
+}
+
+.roundedBox {
+    display: inline-block;
+    background-color: white;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 10px;
+}
+
+.hiddenBox {
+    display: none;
+}
+
+.hiddenForm {
+    margin-right: 5px;
+}
+
+.outputBox {
+    border-width: 2px;
+    border-style: solid;
+    border-color: #a6c7ff;
+    width: 30%;
+}
+
+.radioLabel {
+    width: 220px;
+}
+
+.alignLeft {
+    text-align: left;
+}
+
+.bgAliceBlue {
+    background-color: aliceblue;
+}
+
+#formBox {
+    width: 70%;
+    margin-top: 0px;
+}
+
+#fileForm {
+    width: 50%;
+}

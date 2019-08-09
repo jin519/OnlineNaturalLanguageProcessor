@@ -27,7 +27,6 @@ def run(article, numTokens, freqThreshold):
         # localDist에 존재하는 빈도 분포를 조사
         # key: 복합어 / value: 빈도 수
         for key, value in localDist.items():
-
             # 만약 globalFreqDist에 이미 존재하는 복합어라면
             if key in globalFreqDist:
                 # 해당 복합어의 빈도 수에 value를 누적

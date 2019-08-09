@@ -1,212 +1,181 @@
-document.writeln("<script src='../static/download.js?1906241034'></script>");
+// 분석 방법 enum
+const ProcessingType = {
+    NER: '0',
+    N_GRAM: '1',
+    WORD_PAIR: '2',
+    PHRASE: '3'
+};
 
-var fileReaderForm; // file reader dom 객체
-var fileReader; // file reader 객체
-var input; // 입력받은 텍스트 파일을 출력하는 dom 객체
-var output; // 분석 결과를 출력하는 dom 객체
+// 출력 영역
+var rawOutput;
+var posTaggedOutput;
+var resultOutput;
 
-var radioButtons; // 라디오 버튼 레퍼런스 리스트
-var currentRadioIdx;
+// 파일 관리
+var fileForm;
+var fileReader;
 
-var wordPairParamUI;
-var posList1;
-var posList2;
+// 라디오 버튼
+var radios;
+var radioComments;
+var radioForms;
+var prevRadioIdx = -1;
 
-var ngramsParamUI;
-var ngramsNumTokens;
-var ngramsFreqThreshold;
+// 분석 시작 버튼
+var submitBtn;
 
-var phraseParamUI;
-var phraseList;
+// 서버 통신
+var rawText;
+var posTaggedText;
+var resultText;
 
-var submitButton; // 전송 버튼
-var downloadButton; // 다운로드 버튼
+function init() {
+    initOutputs();
+    initFileManager();
+    initRadios();
 
-var localText; // 사용자가 선택한 텍스트 파일을 저장하는 string 변수
-var serverResult; // 서버가 가공한 텍스트 파일을 저장하는 string 변수
-
-var currentRoute = null;
-
-function onLoadTextFile() {
-    submitButton.disabled = false;
-
-    for (var i = 0; i < radioButtons.length; i++)
-        radioButtons[i].disabled = false;
+    submitButton = document.getElementById("submitButton");
 }
 
-// 초기화 함수
-function init() {
-    // dom 객체를 가져온다.
-    fileReaderForm = document.getElementById("fileReaderForm");
-    input = document.getElementById("input");
-    output = document.getElementById("output");
-    radioButtons = document.getElementsByName("radioButtons");
+/**
+ * 출력 영역에 대한 dom 객체 레퍼런스를 가져온다.
+ */
+function initOutputs() {
+    rawOutput = document.getElementById("rawOutput");
+    posTaggedOutput = document.getElementById("posTaggedOutput");
+    resultOutput = document.getElementById("resultOutput");
+}
 
-    submitButton = document.getElementById("submit");
-    downloadButton = document.getElementById("download");
-
-    ngramsParamUI = document.getElementById("ngramsParamUI");
-    ngramsNumTokens = document.getElementById("ngramsNumTokens");
-    ngramsFreqThreshold = document.getElementById("ngramsFreqThreshold");
-
-    wordPairParamUI = document.getElementById("wordPairParamUI");
-    posList1 = document.getElementById("posList1");
-    posList2 = document.getElementById("posList2");
-
-    phraseParamUI = document.getElementById("phraseParamUI");
-    phraseList = document.getElementById("phraseList");
-
-    // localText, serverResult를 null로 초기화한다.
-    localText = null;
-    serverResult = null;
-
-    // file reader 객체를 만든다.
+/**
+ * 파일 폼 dom 객체 레퍼런스를 가져온다.
+ * fileReader 객체를 생성하고, 이벤트 리스너를 등록한다.
+ */
+function initFileManager() {
+    fileForm = document.getElementById("fileForm");
     fileReader = new FileReader();
 
-    // onload 리스너를 단다. 콜백 함수로, 파일 로드가 완료되면 실행된다.
-    fileReader.onload = function (event) {
-        // 읽어온 문자열을 localText에 할당한다.
-        localText = event.target.result;
+    // 사용자가 파일을 선택하면 내용을 텍스트로 가져온다.
+    fileForm.addEventListener("change", function () {
+        fileReader.readAsText(fileForm.files[0]);
+    });
 
-        // output 객체의 innerText로 localText를 설정한다.
-        input.innerText = localText;
+    // 파일이 전부 로드되면 원본 텍스트를 저장 및 출력한다.
+    // 라디오 버튼, 분석 시작 버튼을 활성화한다.
+    fileReader.addEventListener("load", function (event) {
+        rawText = event.target.result;
+        rawOutput.style.display = "inline-block";
+        rawOutput.innerText = rawText;
 
-        onLoadTextFile();
-    };
-}
-
-// 사용자가 파일을 선택하면 불리는 콜백 함수
-function fileRead() {
-    // 텍스트 파일을 읽어온다.
-    fileReader.readAsText(fileReaderForm.files[0]);
-}
-
-function onRadioChange(target) {
-    currentRadioIdx = parseInt(target.value);
-
-    switch (currentRadioIdx) {
-        // NamedEntity
-        case 0:
-            currentRoute = "/NamedEntity";
-            ngramsParamUI.style.display = "none";
-            wordPairParamUI.style.display = "none";
-            phraseParamUI.style.display = "none";
-            break;
-
-        // NGrams
-        case 1:
-            currentRoute = "/NGrams";
-            ngramsParamUI.style.display = "inline-block";
-            wordPairParamUI.style.display = "none";
-            phraseParamUI.style.display = "none";
-            break;
-
-        // WordPair
-        case 2:
-            currentRoute = "/WordPair";
-            ngramsParamUI.style.display = "none";
-            wordPairParamUI.style.display = "inline-block";
-            phraseParamUI.style.display = "none";
-            break;
-
-        // Phrase
-        case 3:
-            currentRoute = "/Phrase";
-            ngramsParamUI.style.display = "none";
-            wordPairParamUI.style.display = "none";
-            phraseParamUI.style.display = "inline-block";
-            break;
-    }
-}
-
-function buildAdditionalParams() {
-    var retVal = "";
-
-    switch (currentRadioIdx) {
-        // NamedEntity
-        case 0:
-            break;
-
-            // NGrams
-        case 1:
-            retVal += (ngramsNumTokens.value + "\n");
-            retVal += (ngramsFreqThreshold.value + "\n");
-            break;
-
-            // WordPair
-        case 2:
-            retVal += (posList1.options[posList1.selectedIndex].value + "\n");
-            retVal += (posList2.options[posList2.selectedIndex].value + "\n");
-            break;
-
-            // Phrase
-        case 3:
-            retVal += (phraseList.options[phraseList.selectedIndex].value);
-            break;
-    }
-
-    return retVal;
-}
-
-// 전송 버튼을 누르면 호출되는 콜백 함수
-function submitBtnOnClick() {
-    if (currentRoute == null) {
-        alert("먼저 분석 종류를 선택해주시기 바랍니다.");
-        return;
-    }
-
-    onAnalyzingStart();
-    alert("분석을 시작합니다.");
-
-    var params = buildAdditionalParams();
-
-    // 서버로 읽어온 텍스트 파일을 보내고, 가공된 데이터를 가져온다.
-    $.ajax({
-        type: "POST",
-        url: currentRoute,
-
-        // data는 이름 : 컨텐츠 쌍으로 구성된다. (json format)
-        data: {
-            article: localText,
-            additionalParams: params
-        },
-        success: function (response) {
-            // 분석한 결과를 serverResult에 저장하고, 알림을 띄운 후 innerText로 설정한다.
-            serverResult = response['result'];
-
-            output.innerText = serverResult;
-            onAnalyzingFinish();
-
-            alert('분석이 완료되었습니다.');
-        }
+        activateRadios();
+        radios[0].click(); // 첫번째 라디오 버튼을 기본으로 클릭한다.
+        activateSubmitButton();
     });
 }
 
-// 다운로드 버튼을 누르면 호출되는 콜백 함수
-function downloadBtnOnClick() {
-    // 분석 결과를 로컬에 저장한다.
-    download(serverResult, "result.txt", "text/plain");
+/**
+ * 라디오 버튼 dom 객체 레퍼런스를 가져오고, 이벤트 리스너를 등록한다.
+ */
+function initRadios() {
+    radios = document.getElementsByName("processingType");
+    radioComments = document.getElementsByClassName("hiddenComment");
+    radioForms = document.getElementsByClassName("hiddenForm");
 
-    for (var i = 0; i < radioButtons.length; i++)
-        radioButtons[i].disabled = true;
+    radios.forEach(radio => radio.addEventListener("click", onRadioClick));
 }
 
-function onAnalyzingStart() {
-    fileReaderForm.disabled = true;
-    submitButton.disabled = true;
-
-    for (var i = 0; i < radioButtons.length; i++)
-        radioButtons[i].disabled = true;
-
-    downloadButton.disabled = true;
+/**
+ * 분석 시작 버튼 dom 객체 레퍼런스를 가져오고, 이벤트 리스너를 등록한다.
+ */
+function initSubmitButton() {
+    submitBtn = document.getElementsById("submitButton");
 }
 
-function onAnalyzingFinish() {
-    fileReaderForm.disabled = false;
+/**
+ * 라디오 버튼을 활성화한다.
+ */
+function activateRadios() {
+    radios.forEach(radio => radio.disabled = false);
+}
+
+/**
+ * 라디오 버튼 클릭 시 호출된다.
+ */
+function onRadioClick() {
+    const RADIO_IDX = this.value;
+
+    markClickedRadio(RADIO_IDX);
+    showRadioForm(RADIO_IDX);
+    showRadioComment(RADIO_IDX);
+
+    prevRadioIdx = RADIO_IDX;
+}
+
+/**
+ * 라디오 버튼 클릭 시 버튼 배경색을 강조한다.
+ * @param {number} radioIdx 클릭한 라디오 버튼 인덱스
+ */
+function markClickedRadio(radioIdx) {
+    if (prevRadioIdx >= ProcessingType.NER)
+        radios[prevRadioIdx].parentElement.style.backgroundColor = "aliceblue";
+
+    radios[radioIdx].parentElement.style.backgroundColor = "#a6c7ff";
+}
+
+/**
+ * 라디오 버튼 클릭시 대응하는 분석 방법에 필요한 폼을 출력한다.
+ * NER의 경우 추가로 필요한 폼이 없기 때문에, radioForm 배열이 왼쪽으로 한칸 씩 당겨진다.
+ * @example
+ * radioForm[0]: N-GRAM, radioForm[1]: Word-Pair, radioForm[2]: Phrase
+ * @param {number} radioIdx 클릭한 라디오 버튼 인덱스
+ */
+function showRadioForm(radioIdx) {
+    if (prevRadioIdx > ProcessingType.NER)
+        radioForms[(prevRadioIdx - 1)].style.display = "none";
+
+    if (radioIdx > ProcessingType.NER)
+        radioForms[radioIdx - 1].style.display = "inline-block";
+}
+
+/**
+ * 라디오 버튼 클릭시 대응하는 분석 방법에 대한 코멘트를 출력한다.
+ * @param {number} radioIdx 클릭한 라디오 버튼 인덱스
+ */
+function showRadioComment(radioIdx) {
+    if (prevRadioIdx >= ProcessingType.NER)
+        radioComments[prevRadioIdx].style.display = "none";
+
+    radioComments[radioIdx].style.display = "inline-block";
+}
+
+/**
+ * 분석 시작 버튼을 활성화한다.
+ */
+function activateSubmitButton() {
     submitButton.disabled = false;
+}
 
-    for (var i = 0; i < radioButtons.length; i++)
-        radioButtons[i].disabled = false;
+// 분석 시작 버튼 클릭 시 호출된다.
 
-    downloadButton.disabled = false;
+// 서버로 원본 텍스트 파일을 보내고, 가공된 데이터를 가져온다.
+// @param route: 경로
+function requestAnalysis(route) {
+    // $.ajax({
+    //     type: "POST",
+    //     url: route,
+
+    //     // data는 이름 : 컨텐츠 쌍으로 구성된다. (json format)
+    //     data: {
+    //         article: rawText,
+    //         additionalParams: params
+    //     },
+    //     success: function (response) {
+    //         // 분석한 결과를 serverResult에 저장하고, 알림을 띄운 후 innerText로 설정한다.
+    //         resultText = response['result'];
+
+    //         output.innerText = serverResult;
+    //         onAnalyzingFinish();
+
+    //         alert('분석이 완료되었습니다.');
+    //     }
+    // });
 }
