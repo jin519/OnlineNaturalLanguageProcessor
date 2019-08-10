@@ -172,10 +172,10 @@ function activateSubmitButton() {
  * 분석 시작 버튼 클릭 시 호출된다.
  */
 function onSubmitButtonClick() {
-    let params = buildAdditionalParams();
-
     if (text.posTagged == null)
         requestAnalysis("/PosTag", null);
+
+    let params = buildAdditionalParams();
 
     switch (prevRadioIdx) {
         case ProcessingType.NER:
@@ -234,11 +234,13 @@ function requestAnalysis(route, params) {
 
         // 분석 결과를 저장하고, 화면에 출력한다.
         success: function (response) {
-            if (route == "/PosTag") {
+            if (response.route == "/PosTag") {
                 text.posTagged = response.result;
-                dom.posTaggedOutput.innerText = text.posTagged;
+                dom.posTaggedOutput.style.display = "inline-block";
+                dom.posTaggedOutput.innerHTML = text.posTagged;
             } else {
                 text.result = response.result;
+                dom.resultOutput.style.display = "inline-block";
                 dom.resultOutput.innerText = text.result;
             }
         }

@@ -31,6 +31,8 @@ body {
     border-style: solid;
     border-color: #a6c7ff;
     width: 30%;
+    height: 800px;
+    overflow-y: auto;
 }
 
 .alignLeft {
@@ -39,6 +41,10 @@ body {
 
 .bgAliceBlue {
     background-color: aliceblue;
+}
+
+.bgAmbigousBlue {
+    background-color: #c7dafa;
 }
 
 #formBox {
