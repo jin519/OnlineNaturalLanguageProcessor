@@ -169,12 +169,10 @@ function activateSubmitButton() {
 }
 
 /**
- * 분석 시작 버튼 클릭 시 호출된다.
+ * 현재 선택한 라디오 버튼의 인덱스를 조사하여 해당 분석을 수행한다.
  */
-function onSubmitButtonClick() {
-    if (text.posTagged == null)
-        requestAnalysis("/PosTag", null);
-
+function requestSelectedWork()
+{
     let params = buildAdditionalParams();
 
     switch (prevRadioIdx) {
@@ -190,6 +188,26 @@ function onSubmitButtonClick() {
         case ProcessingType.PHRASE:
             requestAnalysis("/Phrase", params);
     }
+}
+
+/**
+ * 분석 시작 버튼 클릭 시 호출된다.
+ */
+function onSubmitButtonClick() {
+    if (text.posTagged == null)
+    {
+        /*
+            해당 작업은 비동기 처리되나, 작업 진행이 순차적으로 (PogTag 처리 먼저, 이후 작업 수행)
+            처리되어야 하므로, 첫 번째로 처리되어야 하는 작업인 PosTag 작업을 먼저 요청한다.
+        */
+        requestAnalysis("/PosTag", null);
+
+        // 순차 처리를 위해 이후 작업은 PosTag 처리 요청이 완료된 이후 재요청한다.
+        return;
+    }
+
+    // 현재 영역은 위 분기문이 작동하지 않았을 시, 즉 PosTag 처리가 완료된 이후 진입하게 된다.
+    requestSelectedWork();
 }
 
 /**
@@ -238,6 +256,9 @@ function requestAnalysis(route, params) {
                 text.posTagged = response.result;
                 dom.posTaggedOutput.style.display = "inline-block";
                 dom.posTaggedOutput.innerHTML = text.posTagged;
+
+                // PosTag 생성이 완료된 이후, 본래 선택했던 분석을 수행하기 위해 아래의 함수를 다시 호출한다.
+                requestSelectedWork();
             } else {
                 text.result = response.result;
                 dom.resultOutput.style.display = "inline-block";

@@ -1,23 +1,24 @@
 # POS(Part Of Speech) tagging
-# 텍스트를 문장 단위로 분할하고, 각 문장을 토큰화 한다.
-# 이후 각 토큰에 품사 태그를 붙인다.
+# 토큰 별 품사 정보를 알아낸다.
 
 from nltk import sent_tokenize, word_tokenize, pos_tag
-from application import nlp
+
 
 def run(rawText):
+
     retVal = ""
 
     # 텍스트를 문장 단위로 분할한다.
-    nlp.sentenceList = sent_tokenize(rawText)
+    sentenceList = sent_tokenize(rawText)
+    taggedTokenListList = []
 
-    for sentence in nlp.sentenceList:
+    for sentence in sentenceList:
         # 각 문장을 토큰화 한다.
         rawTokenList = word_tokenize(sentence)
 
         # 각 토큰에 품사 태그를 붙인다.
         taggedTokenList = pos_tag(rawTokenList)
-        nlp.taggedTokenListList.append(taggedTokenList)
+        taggedTokenListList.append(taggedTokenList)
 
         for taggedToken in taggedTokenList:
             retVal += (taggedToken[0] + "<span class='bgAmbigousBlue'>&#x2770;")
@@ -25,4 +26,4 @@ def run(rawText):
 
         retVal += "\n"
 
-    return retVal
+    return retVal, sentenceList, taggedTokenListList
