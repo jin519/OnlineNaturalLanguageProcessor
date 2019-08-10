@@ -14,8 +14,16 @@ body {
     display: none;
 }
 
-.hiddenForm {
+.radioLabel {
+    width: 220px;
+}
+
+.analysisForm {
     margin-right: 5px;
+}
+
+.guideCell {
+    width: 190px;
 }
 
 .outputBox {
@@ -23,10 +31,6 @@ body {
     border-style: solid;
     border-color: #a6c7ff;
     width: 30%;
-}
-
-.radioLabel {
-    width: 220px;
 }
 
 .alignLeft {

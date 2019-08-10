@@ -22,21 +22,21 @@
         <!-- 라디오 버튼 폼 -->
         <div class="roundedBox">
             <label class="roundedBox radioLabel alignLeft bgAliceBlue">
-                <input type="radio" name="processingType" value="0" disabled>Named Entity Recognition
+                <input type="radio" name="analysisType" value="0" disabled>Named Entity Recognition
             </label>
-            <label class="roundedBox radioLabel bgAliceBlue">
-                <input type="radio" name="processingType" value="1" disabled>N-Gram Extraction
+            <label class="roundedBox radioLabel alignLeft bgAliceBlue">
+                <input type="radio" name="analysisType" value="1" disabled>N-Gram Extraction
             </label>
-            <label class="roundedBox radioLabel bgAliceBlue">
-                <input type="radio" name="processingType" value="2" disabled>Word-Pair Extraction
+            <label class="roundedBox radioLabel alignLeft bgAliceBlue">
+                <input type="radio" name="analysisType" value="2" disabled>Word-Pair Extraction
             </label>
-            <label class="roundedBox radioLabel bgAliceBlue">
-                <input type="radio" name="processingType" value="3" disabled>Phrase Extraction
+            <label class="roundedBox radioLabel alignLeft bgAliceBlue">
+                <input type="radio" name="analysisType" value="3" disabled>Phrase Extraction
             </label>
         </div><br>
 
         <!-- N-Gram Extraction 라디오 버튼을 선택하면 출력되는 폼 -->
-        <div class="roundedBox hiddenForm hiddenBox">
+        <div class="roundedBox analysisForm hiddenBox">
             <label>
                 토큰 수 <input id="ngramNumTokens" type="number" value="2" min="0" max="10" step="1">
             </label>
@@ -46,7 +46,7 @@
         </div>
 
         <!-- Word-Pair Extraction 라디오 버튼을 선택하면 출력되는 폼 -->
-        <div class="roundedBox hiddenForm hiddenBox">
+        <div class="roundedBox analysisForm hiddenBox">
             <select id="wordpairPosList1">
                 <option value="NOUN">명사(NOUN)</option>
                 <option value="VERB">동사(VERB)</option>
@@ -72,7 +72,7 @@
         </div>
 
         <!-- Phrase Extraction 라디오 버튼을 선택하면 출력되는 폼 -->
-        <div class="roundedBox hiddenForm hiddenBox">
+        <div class="roundedBox analysisForm hiddenBox">
             <select id="phraseList">
                 <option value="NP">명사구(NP)</option>
                 <option value="PP">전치사구(PP)</option>
@@ -86,96 +86,101 @@
             <button type="button" id="downloadButton" disabled>다운로드</button>
         </div><br>
 
-        <!-- Named Entity Recognition 라디오 버튼을 선택하면 출력되는 코멘트 -->
-        <div class="hiddenComment roundedBox hiddenBox alignLeft">
-            토큰 별 유형 정보를 출력합니다.<br>
-            유형에는 다음과 같은 타입들이 있습니다.<br><br>
 
-            <table>
-                <tr>
-                    <td><b>COMMERCIAL_ITEM</b></td>
-                    <td>브랜드 제품</td>
-                </tr>
-                <tr>
-                    <td><b>DATE</b></td>
-                    <td>전체 날짜(11/25/2017), 일(Tuesday), 월(May) 또는 시간(8:30 a.m.)</td>
-                </tr>
-                <tr>
-                    <td><b>EVENT</b></td>
-                    <td>축제, 콘서트, 선거 등의 행사</td>
-                </tr>
-                <tr>
-                    <td><b>LOCATION</b></td>
-                    <td>국가, 도시, 호수, 건물 등과 같은 특정 위치</td>
-                </tr>
-                <tr>
-                    <td><b>ORGANIZATION</b></td>
-                    <td>정부, 회사, 종교, 스포츠 팀 등과 같은 대규모 조직</td>
-                </tr>
-                <tr>
-                    <td><b>PERSON</b></td>
-                    <td>개인, 사람 그룹, 닉네임, 가상의 인물</td>
-                </tr>
-                <tr>
-                    <td><b>QUANTITY</b></td>
-                    <td>통화, 백분율, 숫자, 바이트 등과 같은 정량화 된 수치</td>
-                </tr>
-                <tr>
-                    <td><b>TITLE</b></td>
-                    <td>영화, 책, 노래 등과 같은 창작물이나 창작물에 부여된 공식 명칭</td>
-                </tr>
-            </table><br>
+        <details class="roundedBox">
+            <summary>설명</summary>
 
-            <i>예. wonjin - PERSON, seoul - LOCATION, tuesday - DATE</i>
-        </div>
+            <!-- Named Entity Recognition 라디오 버튼을 선택하면 출력되는 코멘트 -->
+            <div class="analysisComment hiddenBox alignLeft">
+                토큰 별 유형 정보를 출력합니다.<br>
+                유형에는 다음과 같은 타입들이 있습니다.<br><br>
 
-        <!-- N-Gram Extraction 라디오 버튼을 선택하면 출력되는 코멘트 -->
-        <div class="hiddenComment roundedBox hiddenBox alignLeft">
-            주어진 문장을 토큰 별로 분할한 뒤, n개 단위로 묶어 n-gram 리스트를 생성합니다.<br>
-            문서 내 n-gram들의 빈도수를 측정합니다.<br>
-            임계값 이상의 n-gram을 출력합니다.<br><br>
+                <table>
+                    <tr>
+                        <td class="guideCell"><b>COMMERCIAL_ITEM</b></td>
+                        <td>브랜드 제품</td>
+                    </tr>
+                    <tr>
+                        <td class="guideCell"><b>DATE</b></td>
+                        <td>전체 날짜(11/25/2017), 일(Tuesday), 월(May) 또는 시간(8:30 a.m.)</td>
+                    </tr>
+                    <tr>
+                        <td class="guideCell"><b>EVENT</b></td>
+                        <td>축제, 콘서트, 선거 등의 행사</td>
+                    </tr>
+                    <tr>
+                        <td class="guideCell"><b>LOCATION</b></td>
+                        <td>국가, 도시, 호수, 건물 등과 같은 특정 위치</td>
+                    </tr>
+                    <tr>
+                        <td class="guideCell"><b>ORGANIZATION</b></td>
+                        <td>정부, 회사, 종교, 스포츠 팀 등과 같은 대규모 조직</td>
+                    </tr>
+                    <tr>
+                        <td class="guideCell"><b>PERSON</b></td>
+                        <td>개인, 사람 그룹, 닉네임, 가상의 인물</td>
+                    </tr>
+                    <tr>
+                        <td class="guideCell"><b>QUANTITY</b></td>
+                        <td>통화, 백분율, 숫자, 바이트 등과 같은 정량화 된 수치</td>
+                    </tr>
+                    <tr>
+                        <td class="guideCell"><b>TITLE</b></td>
+                        <td>영화, 책, 노래 등과 같은 창작물이나 창작물에 부여된 공식 명칭</td>
+                    </tr>
+                </table><br>
 
-            <i>예. 토큰 수: 3, 빈도수 임계값 3 &#x279C; ('My', 'name', 'is') - 3</i><br>
-            <table>
-                <tr>
-                    <td><b>My name is jin.</b></td>
-                    <td><b>My name is Jin.</b></td>
-                    <td><b>My name is JIN.</b></td>
-                </tr>
-                <tr>
-                    <td><mark>('My', 'name', 'is')</mark></td>
-                    <td><mark>('My', 'name', 'is')</mark></td>
-                    <td><mark>('My', 'name', 'is')</mark></td>
-                </tr>
-                <tr>
-                    <td>('name', 'is', 'jin')</td>
-                    <td>('name', 'is', 'Jin')</td>
-                    <td>('name', 'is', 'JIN')</td>
-                </tr>
-                <tr>
-                    <td>('is', 'jin', '.')</td>
-                    <td>('is', 'Jin', '.')</td>
-                    <td>('is', 'JIN', '.')</td>
-                </tr>
-            </table>
-        </div>
+                <i>예. wonjin - PERSON, seoul - LOCATION, tuesday - DATE</i>
+            </div>
 
-        <!-- Word-Pair Extraction 라디오 버튼을 선택하면 출력되는 코멘트 -->
-        <div class="hiddenComment roundedBox hiddenBox alignLeft">
-            사용자가 두개의 품사를 선택합니다.<br>
-            주어진 문장을 토큰 별로 분할한 뒤, 연속되는 토큰의 품사를 조사합니다.<br>
-            선택한 품사들과 일치하는 토큰 쌍을 출력합니다.<br><br>
+            <!-- N-Gram Extraction 라디오 버튼을 선택하면 출력되는 코멘트 -->
+            <div class="analysisComment roundedBox hiddenBox alignLeft">
+                주어진 문장을 토큰 별로 분할한 뒤, n개 단위로 묶어 n-gram 리스트를 생성합니다.<br>
+                문서 내 n-gram들의 빈도수를 측정합니다.<br>
+                임계값 이상의 n-gram을 출력합니다.<br><br>
 
-            <i>예. 명사, 동사 &#x279C; Ministry said, Moon expressed, government hopes</i>
-        </div>
+                <i>예. 토큰 수: 3, 빈도수 임계값 3 &#x279C; ('My', 'name', 'is') - 3</i><br>
+                <table>
+                    <tr>
+                        <td class="guideCell"><b>My name is jin.</b></td>
+                        <td class="guideCell"><b>My name is Jin.</b></td>
+                        <td class="guideCell"><b>My name is JIN.</b></td>
+                    </tr>
+                    <tr>
+                        <td class="guideCell"><mark>('My', 'name', 'is')</mark></td>
+                        <td class="guideCell"><mark>('My', 'name', 'is')</mark></td>
+                        <td class="guideCell"><mark>('My', 'name', 'is')</mark></td>
+                    </tr>
+                    <tr>
+                        <td class="guideCell">('name', 'is', 'jin')</td>
+                        <td class="guideCell">('name', 'is', 'Jin')</td>
+                        <td class="guideCell">('name', 'is', 'JIN')</td>
+                    </tr>
+                    <tr>
+                        <td class="guideCell">('is', 'jin', '.')</td>
+                        <td class="guideCell">('is', 'Jin', '.')</td>
+                        <td class="guideCell">('is', 'JIN', '.')</td>
+                    </tr>
+                </table>
+            </div>
 
-        <!-- Phrase Extraction 라디오 버튼을 선택하면 출력되는 코멘트 -->
-        <div class="hiddenComment roundedBox hiddenBox alignLeft">
-            사용자가 추출할 구(Phrase)를 선택합니다.<br>
-            주어진 문장 내 해당되는 구를 출력합니다.<br><br>
+            <!-- Word-Pair Extraction 라디오 버튼을 선택하면 출력되는 코멘트 -->
+            <div class="analysisComment roundedBox hiddenBox alignLeft">
+                사용자가 두개의 품사를 선택합니다.<br>
+                주어진 문장을 토큰 별로 분할한 뒤, 연속되는 토큰의 품사를 조사합니다.<br>
+                선택한 품사들과 일치하는 토큰 쌍을 출력합니다.<br><br>
 
-            <i>예. 명사구 &#x279C; the former Emperor Akihito, Foreign Ministry spokesman</i>
-        </div>
+                <i>예. 명사, 동사 &#x279C; Ministry said, Moon expressed, government hopes</i>
+            </div>
+
+            <!-- Phrase Extraction 라디오 버튼을 선택하면 출력되는 코멘트 -->
+            <div class="analysisComment roundedBox hiddenBox alignLeft">
+                사용자가 추출할 구(Phrase)를 선택합니다.<br>
+                주어진 문장 내 해당되는 구를 출력합니다.<br><br>
+
+                <i>예. 명사구 &#x279C; the former Emperor Akihito, Foreign Ministry spokesman</i>
+            </div>
+        </details>
     </div><br>
 
     <!-- 원본 텍스트를 출력하는 영역 -->

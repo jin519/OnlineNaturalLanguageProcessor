@@ -10,7 +10,6 @@ def getFreqDist(sentence, numTokens):
 
     return FreqDist(ngramList)
 
-
 def run(article, numTokens, freqThreshold):
     # 텍스트 파일을 라인 별로 분할하여 리스트로 저장
     sentences = article.splitlines()
