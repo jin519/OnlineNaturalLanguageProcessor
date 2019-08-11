@@ -19,7 +19,7 @@ def run(sentenceList):
             # 엔티티를 추가하고, retVal에 반영한다.
             if key not in dictMap:
                 dictMap[key] = value
-                row = (key + ': ' + value + '\r\n')
+                row = (key + ' - ' + value + '\r\n')
                 retVal += row
 
     return retVal

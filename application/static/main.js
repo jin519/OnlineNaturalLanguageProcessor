@@ -11,7 +11,7 @@ let dom = {
     analysisComments: null,
     analysisForms: null,
     ngramNumTokens: null,
-    ngramsFreqThreshold: null,
+    ngramFreqThreshold: null,
     wordpairPosList1: null,
     wordpairPosList2: null,
     phraseList: null,
@@ -52,7 +52,7 @@ function getDomReferences() {
     dom.analysisForms = document.getElementsByClassName("analysisForm");
 
     dom.ngramNumTokens = document.getElementById("ngramNumTokens");
-    dom.ngramsFreqThreshold = document.getElementById("ngramsFreqThreshold");
+    dom.ngramFreqThreshold = document.getElementById("ngramFreqThreshold");
     dom.wordpairPosList1 = document.getElementById("wordpairPosList1");
     dom.wordpairPosList2 = document.getElementById("wordpairPosList2");
     dom.phraseList = document.getElementById("phraseList");
@@ -196,13 +196,12 @@ function requestSelectedWork()
 function onSubmitButtonClick() {
     if (text.posTagged == null)
     {
-        /*
-            해당 작업은 비동기 처리되나, 작업 진행이 순차적으로 (PogTag 처리 먼저, 이후 작업 수행)
-            처리되어야 하므로, 첫 번째로 처리되어야 하는 작업인 PosTag 작업을 먼저 요청한다.
-        */
+        // 해당 작업은 비동기 처리 되나, 
+        // 작업이 순차적으로 (PogTag 처리 먼저, 이후 작업 수행) 진행되어야 하므로,
+        // PosTag 작업을 우선 요청한다.
         requestAnalysis("/PosTag", null);
 
-        // 순차 처리를 위해 이후 작업은 PosTag 처리 요청이 완료된 이후 재요청한다.
+        // 이후 작업은 PosTag 처리 요청이 완료된 이후 재요청한다.
         return;
     }
 
@@ -215,12 +214,12 @@ function onSubmitButtonClick() {
  * @return {string} 추가 정보
  */
 function buildAdditionalParams() {
-    let retVal = null;
+    let retVal = "";
 
     switch (prevRadioIdx) {
         case ProcessingType.N_GRAM:
-            retVal += (dom.ngramsNumTokens.value + "\n");
-            retVal += (dom.ngramsFreqThreshold.value);
+            retVal += (dom.ngramNumTokens.value + "\n");
+            retVal += dom.ngramFreqThreshold.value;
             break;
         case ProcessingType.WORD_PAIR:
             retVal += (dom.wordpairPosList1.options[dom.wordpairPosList1.selectedIndex].value + "\n");

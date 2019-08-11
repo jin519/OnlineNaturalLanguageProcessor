@@ -1,14 +1,11 @@
-# from nltk import sent_tokenize
-# from nltk import RegexpParser
-# from nltk import word_tokenize
-# from nltk import pos_tag
-# from nltk import tree
-# from re import search
+# # from nltk import sent_tokenize
+# # from nltk import RegexpParser
+# # from nltk import word_tokenize
+# # from nltk import pos_tag
+# # from nltk import tree
+# # from re import search
 #
-# def run(article, pos1, pos2):
-#     # 텍스트 파일을 문장 단위로 분할하여 sentenceList로 저장
-#     sentenceList = sent_tokenize(article)
-#
+# def run(sentenceList, pos1, pos2):
 #     # 재정의 품사 패턴
 #     noun = 'FW|NN'      # 명사
 #     verb = 'MD|VB'      # 동사
