@@ -22,8 +22,28 @@ def run(posTaggedTokenListList, phrase):
     for posTaggedTokenList in posTaggedTokenListList:
         parsedTree = parser.parse(posTaggedTokenList)
 
+        nodeStackList = []
+
         for subtree in parsedTree:
             if isinstance(subtree, tree.Tree) and subtree.label() == phrase:
-                retVal += (str(subtree) + '\r\n')
+                print(subtree)
+                nodeStack = []
 
-        return retVal
+                for node in subtree:
+                    nodeStack.append(node)
+
+                nodeStackList.append(nodeStack)
+
+        for nodeStack in nodeStackList:
+            while nodeStack:
+                node = nodeStack.pop(0)
+
+                if isinstance(node, tree.Tree):
+                    for subNode in reversed(node):
+                        nodeStack.insert(0, subNode)
+                else:
+                    retVal += (node[0] + " ")
+
+            retVal += "\r\n"
+
+    return retVal

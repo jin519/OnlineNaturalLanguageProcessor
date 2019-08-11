@@ -38,10 +38,10 @@
         <!-- N-Gram Extraction 라디오 버튼을 선택하면 출력되는 폼 -->
         <div class="roundedBox analysisForm hiddenBox">
             <label>
-                토큰 수 <input id="ngramNumTokens" type="number" value="2" min="0" max="10" step="1">
+                토큰 수 <input id="ngramNumTokens" type="number" value="2" min="1" max="10" step="1">
             </label>
             <label>
-                빈도수 임계값 <input id="ngramFreqThreshold" type="number" value="2" min="0" max="10" step="1">
+                빈도수 임계값 <input id="ngramFreqThreshold" type="number" value="2" min="1" max="10" step="1">
             </label>
         </div>
 
@@ -139,7 +139,7 @@
                 문서 내 n-gram들의 빈도수를 측정합니다.<br>
                 임계값 이상의 n-gram을 출력합니다.<br><br>
 
-                <i>예. 토큰 수: 3, 빈도수 임계값 3 &#x279C; ('My', 'name', 'is') - 3</i><br>
+                <i>예. 토큰 수: 3, 빈도수 임계값 3 &#x279C; My name is - 3</i><br>
                 <table>
                     <tr>
                         <td class="guideCell"><b>My name is jin.</b></td>
@@ -194,6 +194,7 @@
 
     <!-- 자바 스크립트 -->
     <script src="../static/jquery-3.4.1.js"></script>
+    <script src="../static/download.js"></script>
     <script src="../static/main.js"></script>
 </body>
 

@@ -1,6 +1,6 @@
 # 프로그램 실행에 앞서, 먼저 처리되는 초기화 용 파일이다.
 from flask import Flask, render_template, request, jsonify
-from application.nlp import PosTagger, NamedEntityRecognizer, NGramExtractor, PhraseExtractor
+from application.nlp import PosTagger, NamedEntityRecognizer, NGramExtractor, PhraseExtractor, WordPairExtractor
 
 # 텍스트를 문장 단위로 분할하여 저장한 리스트
 # @example Hello my name is Jin. Nice to meet you!
@@ -43,10 +43,7 @@ def PosTag():
     rawText = request.form['rawText']
 
     result, sentenceList, rawTokenListList, posTaggedTokenListList = PosTagger.run(rawText)
-    retVal = {
-        'route': '/PosTag',
-        'result': result
-    }
+    retVal = {'result': result}
 
     return jsonify(retVal)
 
@@ -74,22 +71,21 @@ def NGram():
 
     return jsonify(retVal)
 
-# # http://IP주소:포트번호/WordPair로 접속하고, 가공된 결과물을 받는다.
-# @flaskInstance.route("/WordPair", methods=['POST'])
-# def WordPair(name=None):
-#     article = request.form['article']
-#     additionalParams = request.form['additionalParams'].splitlines()
-#
-#     pos1 = additionalParams[0]
-#     pos2 = additionalParams[1]
-#
-#     # some logic in here
-#     result = WordPairExtractor.run(article, pos1, pos2)
-#
-#     retVal = {'result': result}
-#     return jsonify(retVal)
+# http://IP주소:포트번호/WordPair로 접속하고, 가공된 결과물을 받는다.
+@flaskInstance.route("/WordPair", methods=['POST'])
+def WordPair():
+    global posTaggedTokenListList
 
-# http://IP주소:포트번호/Phrase 로 접속하고, 서버에 article을 보내서 가공된 결과물을 받는다.
+    additionalParams = request.form['additionalParams'].splitlines()
+    pos1 = additionalParams[0]
+    pos2 = additionalParams[1]
+
+    result = WordPairExtractor.run(posTaggedTokenListList, pos1, pos2)
+    retVal = {'result': result}
+
+    return jsonify(retVal)
+
+# http://IP주소:포트번호/Phrase로 접속하고, 가공된 결과물을 받는다.
 @flaskInstance.route("/Phrase", methods=['POST'])
 def Phrase():
     global posTaggedTokenListList

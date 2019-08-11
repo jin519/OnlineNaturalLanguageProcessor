@@ -28,6 +28,8 @@ def run(rawTokenListList, numTokens, freqThreshold):
         freq = freqDistMap[key]
 
         if freq >= freqThreshold:
-            retVal += ("%s - %d\n" % (key, freq))
+            for gram in key:
+                retVal += (gram + " ")
+            retVal += ("- %d\r\n" % freq)
 
     return retVal

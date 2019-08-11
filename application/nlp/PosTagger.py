@@ -23,6 +23,6 @@ def run(rawText):
             retVal += (posTaggedToken[0] + "<span class='bgAmbigousBlue'>&#x2770;")
             retVal += (posTaggedToken[1] + "&#x2771;</span> ")
 
-        retVal += "\n"
+        retVal += "\r\n"
 
     return retVal, sentenceList, rawTokenListList, posTaggedTokenListList

@@ -23,7 +23,7 @@ let dom = {
 };
 
 let fileReader = null;
-
+let loading = false;
 let prevRadioIdx = -1;
 
 let text = {
@@ -83,6 +83,20 @@ function registerListeners() {
 }
 
 /**
+ * 파일 폼을 활성화한다.
+ */
+function activateFileForm() {
+    dom.fileForm.disabled = false;
+}
+
+/**
+ * 파일 폼을 비활성화한다.
+ */
+function deactivateFileForm() {
+    dom.fileForm.disabled = true;
+}
+
+/**
  * 파일 선택 시 호출된다.
  * 파일 내용을 텍스트로 가져온다.
  */
@@ -110,6 +124,13 @@ function onFileReaderLoad(event) {
  */
 function activateRadioButtons() {
     dom.radioButtons.forEach(radioButton => radioButton.disabled = false);
+}
+
+/**
+ * 라디오 버튼을 비활성화한다.
+ */
+function deactivateRadioButtons() {
+    dom.radioButtons.forEach(radioButton => radioButton.disabled = true);
 }
 
 /**
@@ -169,10 +190,16 @@ function activateSubmitButton() {
 }
 
 /**
+ * 분석 시작 버튼을 비활성화한다.
+ */
+function deactivateSubmitButton() {
+    dom.submitButton.disabled = true;
+}
+
+/**
  * 현재 선택한 라디오 버튼의 인덱스를 조사하여 해당 분석을 수행한다.
  */
-function requestSelectedWork()
-{
+function requestSelectedWork() {
     let params = buildAdditionalParams();
 
     switch (prevRadioIdx) {
@@ -194,8 +221,7 @@ function requestSelectedWork()
  * 분석 시작 버튼 클릭 시 호출된다.
  */
 function onSubmitButtonClick() {
-    if (text.posTagged == null)
-    {
+    if (text.posTagged == null) {
         // 해당 작업은 비동기 처리 되나, 
         // 작업이 순차적으로 (PogTag 처리 먼저, 이후 작업 수행) 진행되어야 하므로,
         // PosTag 작업을 우선 요청한다.
@@ -210,6 +236,28 @@ function onSubmitButtonClick() {
 }
 
 /**
+ * 분석이 시작되면 호출된다.
+ */
+function onAnalyzingStart() {
+    loading = true;
+
+    deactivateFileForm();
+    deactivateRadioButtons();
+    deactivateSubmitButton();
+}
+
+/**
+ * 분석이 끝나면 호출된다.
+ */
+function onAnalyzingFinish() {
+    activateFileForm();
+    activateRadioButtons();
+    activateSubmitButton();
+
+    loading = false;
+}
+
+/**
  * 분석에 필요한 추가 인자들을 라인 단위로 구분하여 문자열 형태로 반환한다.
  * @return {string} 추가 정보
  */
@@ -218,11 +266,11 @@ function buildAdditionalParams() {
 
     switch (prevRadioIdx) {
         case ProcessingType.N_GRAM:
-            retVal += (dom.ngramNumTokens.value + "\n");
+            retVal += (dom.ngramNumTokens.value + "\r\n");
             retVal += dom.ngramFreqThreshold.value;
             break;
         case ProcessingType.WORD_PAIR:
-            retVal += (dom.wordpairPosList1.options[dom.wordpairPosList1.selectedIndex].value + "\n");
+            retVal += (dom.wordpairPosList1.options[dom.wordpairPosList1.selectedIndex].value + "\r\n");
             retVal += (dom.wordpairPosList2.options[dom.wordpairPosList2.selectedIndex].value);
             break;
         case ProcessingType.PHRASE:
@@ -239,30 +287,41 @@ function buildAdditionalParams() {
  * @param {string} params 추가 정보
  */
 function requestAnalysis(route, params) {
-    $.ajax({
-        type: "POST",
-        url: route,
+    if (!loading)
+        onAnalyzingStart();
 
-        // data는 이름 : 컨텐츠 쌍으로 구성된다. (json format)
-        data: {
-            rawText: text.raw,
-            additionalParams: params
-        },
+    if (route == "/PosTag") {
+        $.ajax({
+            type: "POST",
+            url: route,
+            data: {
+                rawText: text.raw
+            },
 
-        // 분석 결과를 저장하고, 화면에 출력한다.
-        success: function (response) {
-            if (response.route == "/PosTag") {
+            success: function (response) {
                 text.posTagged = response.result;
                 dom.posTaggedOutput.style.display = "inline-block";
                 dom.posTaggedOutput.innerHTML = text.posTagged;
 
                 // PosTag 생성이 완료된 이후, 본래 선택했던 분석을 수행하기 위해 아래의 함수를 다시 호출한다.
                 requestSelectedWork();
-            } else {
+            }
+        });
+    } else {
+        $.ajax({
+            type: "POST",
+            url: route,
+            data: {
+                additionalParams: params
+            },
+
+            success: function (response) {
                 text.result = response.result;
                 dom.resultOutput.style.display = "inline-block";
                 dom.resultOutput.innerText = text.result;
+
+                onAnalyzingFinish();
             }
-        }
-    });
+        });
+    }
 }
