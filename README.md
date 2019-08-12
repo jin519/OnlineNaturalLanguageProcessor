@@ -1,6 +1,7 @@
 # Online-Natural-Language-Processor
 
-영문 텍스트 파일을 입력 받아 다양한 형태의 nlp를 온라인으로 수행할 수 있는 웹 페이지입니다<br>
+영문 텍스트 파일을 입력 받아 다양한 형태의 nlp를 온라인으로 수행할 수 있는 웹 페이지입니다.<br>
+기능 구현에 NLTK, AWS Comprehend API가 사용되었습니다.
 구체적으로 다음과 같은 분석이 가능합니다.<br>
 
 <ul>
@@ -41,5 +42,11 @@
 Demo
 
 <ul>
-  <li>파일 선택</li>
+  <li>파일 선택<img src="md/demo1.gif"></li>
+  <li>설명 보기<img src="md/demo2.gif"></li>
+  <li>Named Entity Recognition<img src="md/demo3.gif"></li>
+  <li>N-Gram Extraction<img src="md/demo4.gif"></li>
+  <li>Word-Pair Extraction<img src="md/demo5.gif"></li>
+  <li>Phrase Extraction<img src="md/demo6.gif"></li>
+  <li>다운로드<img src="md/demo7.gif"></li>
 </ul>
