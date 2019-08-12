@@ -5,6 +5,7 @@ from nltk import RegexpParser, tree
 
 def run(posTaggedTokenListList, phrase):
     retVal = ""
+    total = 0
 
     # Chunk 정규식 정의
     # Chunk 정규식은 절대적인 기준이 없으며,
@@ -26,13 +27,13 @@ def run(posTaggedTokenListList, phrase):
 
         for subtree in parsedTree:
             if isinstance(subtree, tree.Tree) and subtree.label() == phrase:
-                print(subtree)
                 nodeStack = []
 
                 for node in subtree:
                     nodeStack.append(node)
 
                 nodeStackList.append(nodeStack)
+                total += 1
 
         for nodeStack in nodeStackList:
             while nodeStack:
@@ -45,5 +46,7 @@ def run(posTaggedTokenListList, phrase):
                     retVal += (node[0] + " ")
 
             retVal += "\r\n"
+
+    retVal = (("total: %d\r\nphrase: %s\r\n\r\n" % (total, phrase)) + retVal)
 
     return retVal

@@ -10,33 +10,47 @@
 </head>
 
 <body onload="init()">
+    <!-- 로딩 박스 -->
+    <div id="loadingBox" class="fullScreen hidden">
+        <table class="fullScreen">
+            <tr>
+                <td style="vertical-align: middle">
+                    <div id="loadingMessage" class="roundedBox shown">
+                        <span>요청하신 작업을 수행중입니다.</span><br><br>
+                        <img id="wheel" src="../static/wheel.png">
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+
     <!-- 타이틀 -->
     <h1>Online Natural Language Processor</h1>
 
     <!-- 폼 -->
-    <div id="formBox" class="roundedBox bgAliceBlue">
+    <div id="formBox" class="roundedBox shown bgAliceBlue">
 
         <!-- 파일 폼 -->
-        <input id="fileForm" class="roundedBox" type="file" accept="text/plain"><br>
+        <input id="fileForm" class="roundedBox bgWhite" type="file" accept="text/plain"><br>
 
         <!-- 라디오 버튼 폼 -->
-        <div class="roundedBox">
-            <label class="roundedBox radioLabel alignLeft bgAliceBlue">
+        <div class="roundedBox shown bgWhite">
+            <label class="roundedBox shown radioLabel alignLeft bgAliceBlue">
                 <input type="radio" name="analysisType" value="0" disabled>Named Entity Recognition
             </label>
-            <label class="roundedBox radioLabel alignLeft bgAliceBlue">
+            <label class="roundedBox shown radioLabel alignLeft bgAliceBlue">
                 <input type="radio" name="analysisType" value="1" disabled>N-Gram Extraction
             </label>
-            <label class="roundedBox radioLabel alignLeft bgAliceBlue">
+            <label class="roundedBox shown radioLabel alignLeft bgAliceBlue">
                 <input type="radio" name="analysisType" value="2" disabled>Word-Pair Extraction
             </label>
-            <label class="roundedBox radioLabel alignLeft bgAliceBlue">
+            <label class="roundedBox shown radioLabel alignLeft bgAliceBlue">
                 <input type="radio" name="analysisType" value="3" disabled>Phrase Extraction
             </label>
         </div><br>
 
         <!-- N-Gram Extraction 라디오 버튼을 선택하면 출력되는 폼 -->
-        <div class="roundedBox analysisForm hiddenBox">
+        <div class="roundedBox analysisForm hidden bgWhite">
             <label>
                 토큰 수 <input id="ngramNumTokens" type="number" value="2" min="1" max="10" step="1">
             </label>
@@ -46,7 +60,7 @@
         </div>
 
         <!-- Word-Pair Extraction 라디오 버튼을 선택하면 출력되는 폼 -->
-        <div class="roundedBox analysisForm hiddenBox">
+        <div class="roundedBox analysisForm hidden bgWhite">
             <select id="wordpairPosList1">
                 <option value="NOUN">명사(NOUN)</option>
                 <option value="VERB">동사(VERB)</option>
@@ -72,7 +86,7 @@
         </div>
 
         <!-- Phrase Extraction 라디오 버튼을 선택하면 출력되는 폼 -->
-        <div class="roundedBox analysisForm hiddenBox">
+        <div class="roundedBox analysisForm hidden bgWhite">
             <select id="phraseList">
                 <option value="NP">명사구(NP)</option>
                 <option value="PP">전치사구(PP)</option>
@@ -81,17 +95,17 @@
         </div>
 
         <!-- 버튼 폼 -->
-        <div class="roundedBox">
+        <div class="roundedBox shown bgWhite">
             <button type="button" id="submitButton" disabled>분석 시작</button>
             <button type="button" id="downloadButton" disabled>다운로드</button>
         </div><br>
 
 
-        <details class="roundedBox">
+        <details class="roundedBox shown bgWhite">
             <summary>설명</summary>
 
             <!-- Named Entity Recognition 라디오 버튼을 선택하면 출력되는 코멘트 -->
-            <div class="analysisComment hiddenBox alignLeft">
+            <div class="analysisComment hidden alignLeft">
                 토큰 별 유형 정보를 출력합니다.<br>
                 유형에는 다음과 같은 타입들이 있습니다.<br><br>
 
@@ -134,7 +148,7 @@
             </div>
 
             <!-- N-Gram Extraction 라디오 버튼을 선택하면 출력되는 코멘트 -->
-            <div class="analysisComment roundedBox hiddenBox alignLeft">
+            <div class="analysisComment hidden alignLeft">
                 주어진 문장을 토큰 별로 분할한 뒤, n개 단위로 묶어 n-gram 리스트를 생성합니다.<br>
                 문서 내 n-gram들의 빈도수를 측정합니다.<br>
                 임계값 이상의 n-gram을 출력합니다.<br><br>
@@ -165,7 +179,7 @@
             </div>
 
             <!-- Word-Pair Extraction 라디오 버튼을 선택하면 출력되는 코멘트 -->
-            <div class="analysisComment roundedBox hiddenBox alignLeft">
+            <div class="analysisComment hidden alignLeft">
                 사용자가 두개의 품사를 선택합니다.<br>
                 주어진 문장을 토큰 별로 분할한 뒤, 연속되는 토큰의 품사를 조사합니다.<br>
                 선택한 품사들과 일치하는 토큰 쌍을 출력합니다.<br><br>
@@ -174,7 +188,7 @@
             </div>
 
             <!-- Phrase Extraction 라디오 버튼을 선택하면 출력되는 코멘트 -->
-            <div class="analysisComment roundedBox hiddenBox alignLeft">
+            <div class="analysisComment hidden alignLeft">
                 사용자가 추출할 구(Phrase)를 선택합니다.<br>
                 주어진 문장 내 해당되는 구를 출력합니다.<br><br>
 
@@ -184,13 +198,13 @@
     </div><br>
 
     <!-- 원본 텍스트를 출력하는 영역 -->
-    <div id="rawOutput" class="outputBox roundedBox hiddenBox alignLeft"></div>
+    <div id="rawOutput" class="outputBox roundedBox hidden alignLeft"></div>
 
     <!-- 텍스트를 가공하여 토큰 단위로 품사 태그를 붙여서 출력하는 영역 -->
-    <div id="posTaggedOutput" class="outputBox roundedBox hiddenBox alignLeft"></div>
+    <div id="posTaggedOutput" class="outputBox roundedBox hidden alignLeft"></div>
 
     <!-- 분석 결과를 출력하는 영역 -->
-    <div id="resultOutput" class="outputBox roundedBox hiddenBox alignLeft"></div>
+    <div id="resultOutput" class="outputBox roundedBox hidden alignLeft"></div>
 
     <!-- 자바 스크립트 -->
     <script src="../static/jquery-3.4.1.js"></script>

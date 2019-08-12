@@ -5,6 +5,7 @@ from application.nlp import comprehend
 def run(sentenceList):
     dictMap = {}
     retVal = ''
+    total = 0
 
     for sentence in sentenceList:
         # 각 문장 별 entity를 조사한다.
@@ -21,5 +22,8 @@ def run(sentenceList):
                 dictMap[key] = value
                 row = (key + ' - ' + value + '\r\n')
                 retVal += row
-
+                total += 1
+    
+    retVal = (("total: %d\r\n\r\n" % total) + retVal)
+    
     return retVal

@@ -2,16 +2,39 @@ body {
     text-align: center;
 }
 
-.roundedBox {
-    display: inline-block;
-    background-color: white;
-    border-radius: 5px;
-    padding: 10px;
-    margin: 10px;
+#loadingBox {
+    position: absolute;
+    left: 0;
+    top: 0;
+    background-color: rgba(0, 0, 0, 0.6);
 }
 
-.hiddenBox {
-    display: none;
+#loadingMessage {
+    font-size: 1.5em;
+    padding: 30px;
+    box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.7);
+    background: rgba(255, 255, 255, 0.85);
+}
+
+#wheel {
+    animation-name: infiniteSpinning;
+    animation-duration: 6s;
+    animation-iteration-count: infinite;
+}
+
+#formBox {
+    width: 70%;
+    margin-top: 0px;
+}
+
+#fileForm {
+    width: 50%;
+}
+
+.roundedBox {
+    border-radius: 10px;
+    padding: 10px;
+    margin: 10px;
 }
 
 .radioLabel {
@@ -20,6 +43,10 @@ body {
 
 .analysisForm {
     margin-right: 5px;
+}
+
+.analysisComment {
+    margin-top: 5px;
 }
 
 .guideCell {
@@ -35,8 +62,25 @@ body {
     overflow-y: auto;
 }
 
+.shown {
+    display: inline-block;
+}
+
+.hidden {
+    display: none;
+}
+
+.fullScreen {
+    width: 100%;
+    height: 100%;
+}
+
 .alignLeft {
     text-align: left;
+}
+
+.bgWhite {
+    background-color: white;
 }
 
 .bgAliceBlue {
@@ -47,11 +91,12 @@ body {
     background-color: #c7dafa;
 }
 
-#formBox {
-    width: 70%;
-    margin-top: 0px;
-}
+@keyframes infiniteSpinning {
+    from {
+        transform: rotate(0deg);
+    }
 
-#fileForm {
-    width: 50%;
+    to {
+        transform: rotate(360deg);
+    }
 }

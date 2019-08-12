@@ -5,6 +5,7 @@ from nltk import RegexpParser, tree
 
 def run(posTaggedTokenListList, pos1, pos2):
     retVal = ''
+    total = 0
 
     # word pair 정규식을 정의한다.
     regex = ('pattern: {<%s><%s>}' % (getPosTagRegex(pos1), getPosTagRegex(pos2)))
@@ -20,6 +21,9 @@ def run(posTaggedTokenListList, pos1, pos2):
             if isinstance(subtree, tree.Tree):
                 retVal += (subtree[0][0] + " ")
                 retVal += (subtree[1][0] + "\r\n")
+                total += 1
+
+    retVal = (("total: %d\r\npos1: %s, pos2: %s\r\n\r\n" % (total, pos1, pos2)) + retVal)
 
     return retVal
 

@@ -6,6 +6,7 @@ from nltk import FreqDist, ngrams
 def run(rawTokenListList, numTokens, freqThreshold):
     freqDistMap = {}
     retVal = ""
+    total = 0
 
     # freqDistMap [key: n-gram, value: 빈도수]를 구축한다.
     for rawTokenList in rawTokenListList:
@@ -31,5 +32,8 @@ def run(rawTokenListList, numTokens, freqThreshold):
             for gram in key:
                 retVal += (gram + " ")
             retVal += ("- %d\r\n" % freq)
+            total += 1
+
+    retVal = (("total: %d\r\nnumTokens: %d, freqThreshold: %d\r\n\r\n" % (total, numTokens, freqThreshold)) + retVal)
 
     return retVal
