@@ -3,7 +3,8 @@
 >프로젝트 설정에 필요한 자세한 내용들은 <a href="https://github.com/jin519/Online-Natural-Language-Processor/blob/29dd3745102bbaa59789a41f548add28ab21cfb4/documentation/.README.md">다음 문서</a>를 참고하십시오.
 
 >영문 텍스트 파일을 입력 받아 다양한 형태의 nlp를 온라인으로 수행할 수 있는 웹 페이지입니다.<br>
-<a href="http://www.godjin.online:8000">이곳</a>에서 서비스를 이용해 보실 수 있습니다.<br>
+<a href="http://www.godjin.online:8000">이곳</a>에서 서비스를 이용해 보실 수 있습니다.
+
 본 프로젝트는 다음과 같은 기능을 제공합니다.<br>
 
 
