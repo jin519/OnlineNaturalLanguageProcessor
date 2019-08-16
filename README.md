@@ -46,11 +46,11 @@
 Demo
 
 <ul>
-  <li>파일 선택<img src="md/demo1.gif"></li>
-  <li>설명 보기<img src="md/demo2.gif"></li>
-  <li>Named Entity Recognition<img src="md/demo3.gif"></li>
-  <li>N-Gram Extraction<img src="md/demo4.gif"></li>
-  <li>Word-Pair Extraction<img src="md/demo5.gif"></li>
-  <li>Phrase Extraction<img src="md/demo6.gif"></li>
-  <li>다운로드<img src="md/demo7.gif"></li>
+  <li>파일 선택<kbd><img src="md/demo1.gif"></kbd></li><br>
+  <li>설명 보기<kbd><img src="md/demo2.gif"></kbd></li><br>
+  <li>Named Entity Recognition<kbd><img src="md/demo3.gif"></kbd></li><br>
+  <li>N-Gram Extraction<kbd><img src="md/demo4.gif"></kbd></li><br>
+  <li>Word-Pair Extraction<kbd><img src="md/demo5.gif"></kbd></li><br>
+  <li>Phrase Extraction<kbd><img src="md/demo6.gif"></kbd></li><br>
+  <li>다운로드<kbd><img src="md/demo7.gif"></kbd></li>
 </ul>
