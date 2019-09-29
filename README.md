@@ -1,4 +1,4 @@
-# Online-Natural-Language-Processor
+# OnlineNaturalLanguageProcessor
 
 >프로젝트 설정에 필요한 자세한 내용들은 <a href="https://github.com/jin519/Online-Natural-Language-Processor/blob/master/document/README.md">다음 문서</a>를 참고하십시오.
 
